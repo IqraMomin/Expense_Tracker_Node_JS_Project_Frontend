@@ -1,0 +1,8 @@
+.signup-div{
+    width: 450px;
+    display: flex;
+    flex-direction: column;
+    margin:auto;
+    padding: 4rem 3rem;
+    background-color: aliceblue;
+}

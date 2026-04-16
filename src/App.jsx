@@ -1,11 +1,12 @@
-import { useState } from 'react'
-import './App.css'
+import './App.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
+import SignUp from './pages/SignUp';
 
 function App() {
   
   return (
     <div className='container-fluid'>
+      <SignUp/>
       
     </div>
   )
