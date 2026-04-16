@@ -9,7 +9,7 @@ const initialFormData = {
 function SignUp() {
     const [login, setLogin] = useState(false);
     const [formData, setFormData] = useState(initialFormData);
-    const [errors, setErrors] = useState({ name: "", password: "", email: "" ,confirmPassword:""});
+    const [errors, setErrors] = useState({ name: "", password: "", email: "", confirmPassword: "" });
 
     const checkForm = (name, email, password, password2) => {
         const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -69,8 +69,8 @@ function SignUp() {
         const { name, value } = e.target;
         setFormData(prev => (
             { ...prev, [name]: value }))
-        setErrors(prev=>(
-            {...prev,[name]:""}
+        setErrors(prev => (
+            { ...prev, [name]: "" }
         ))
     }
 
@@ -84,25 +84,45 @@ function SignUp() {
                     controlId="name"
                     label="Name"
                     className="mb-3">
-                    <Form.Control value={formData.name} name='name' onChange={handleChange} type="text" placeholder="name" />
-                    {errors.name && <p>{errors.name}</p>}
+                    <Form.Control value={formData.name} name='name' onChange={handleChange} type="text"
+                        placeholder="name"
+                        isInvalid={!!errors.name}
+                    />
+                    <Form.Control.Feedback type="invalid">
+                        {errors.name}
+                    </Form.Control.Feedback>
+                    
                 </FloatingLabel>
                 <FloatingLabel
                     controlId="email"
                     label="Email address"
                     className="mb-3">
-                    <Form.Control value={formData.email} onChange={handleChange} type="email" name='email' placeholder="name@example.com" />
-                    {errors.email && <p>{errors.email}</p>}
+                    <Form.Control value={formData.email}
+                        isInvalid={!!errors.email}
+                        
+                        onChange={handleChange} type="email" name='email' placeholder="name@example.com" />
+                    <Form.Control.Feedback type="invalid">
+                        {errors.email}
+                    </Form.Control.Feedback>
+
                 </FloatingLabel>
                 <FloatingLabel controlId="password" label="Password" className="mb-3">
                     <Form.Control value={formData.password} onChange={handleChange}
-                        type="password" name="password" placeholder="Password" />
-                    {errors.password && <p>{errors.password}</p>}
+                        type="password" name="password" placeholder="Password"
+                        isInvalid={!!errors.password} />
+                   <Form.Control.Feedback type="invalid">
+                        {errors.password}
+                    </Form.Control.Feedback>
+                    
                 </FloatingLabel>
                 {!login && <FloatingLabel controlId="confirmPassword" label="Confirm Password" className="mb-3">
-                    <Form.Control value={formData.confirmPassword} onChange={handleChange} type="password" name='confirmPassword' placeholder="Password" />
-                    {errors.confirmPassword && <p>{errors.confirmPassword}</p>}
-                </FloatingLabel>}
+                    <Form.Control value={formData.confirmPassword} 
+                    isInvalid={!!errors.confirmPassword}
+                    onChange={handleChange} type="password" name='confirmPassword' placeholder="Password" />
+                   
+                    <Form.Control.Feedback type="invalid">
+                        {errors.confirmPassword}
+                    </Form.Control.Feedback></FloatingLabel>}
                 <div className='text-center d-flex flex-column gap-2'>
                     <Button type="submit" variant="primary">{login ? "LOGIN" : "SIGNUP"}</Button>
                     <Button style={{ color: "black" }} variant="link">Already a user? Login</Button>

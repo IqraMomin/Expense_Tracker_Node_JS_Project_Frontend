@@ -6,3 +6,9 @@
     padding: 4rem 3rem;
     background-color: aliceblue;
 }
+
+form p {
+    color: red;
+    margin-left: 5px;
+    margin-top: 10px;
+}
