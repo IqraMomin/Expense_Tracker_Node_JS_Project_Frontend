@@ -1,8 +1,9 @@
 import React, { useState } from 'react'
-import { Button, FloatingLabel, Form } from 'react-bootstrap';
+import { Alert, Button, FloatingLabel, Form } from 'react-bootstrap';
 import "./SignUp.css";
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { loginUser, signUp } from '../store/Slices/authSlice';
+import { authActions } from '../store/Slices/authSlice';
 
 const initialFormData = {
     name: "", email: "", password: "", confirmPassword: ""
@@ -13,6 +14,8 @@ function SignUp() {
     const [formData, setFormData] = useState(initialFormData);
     const [errors, setErrors] = useState({ name: "", password: "", email: "", confirmPassword: "" });
     const dispatch = useDispatch();
+    const error = useSelector(state=>state.auth.error);
+
 
     const checkForm = (name, email, password, password2,isLogin) => {
         const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -86,6 +89,7 @@ function SignUp() {
         setErrors(prev => (
             { ...prev, [name]: "" }
         ))
+        dispatch(authActions.clearError());
     }
 
     return (
@@ -94,6 +98,7 @@ function SignUp() {
                 <h2>{login ? "Welcome back" : "Get Started"}</h2>
                 <p style={{marginTop:"1rem"}}>{login ? "Please enter your details" : "Create Account"}</p>
             </div>
+            {error && <Alert variant='danger'>{error}</Alert>}
             <Form onSubmit={formSubmitHandler}>
                 {!login && <FloatingLabel
                     controlId="name"
@@ -141,7 +146,11 @@ function SignUp() {
                     </Form.Control.Feedback></FloatingLabel>}
                 <div className='d-flex flex-column gap-2'>
                     <Button type="submit" variant="primary">{login ? "LOGIN" : "SIGNUP"}</Button>
-                    <Button onClick={()=>{setLogin(!login)}} style={{ color: "black" }} variant="link">
+                    <Button onClick={()=>{
+                        setLogin(!login);
+                        dispatch(authActions.clearError());
+                        setErrors({});
+                        }} style={{ color: "black" }} variant="link">
                        {login ? "New User? Sign Up":"Already a user? Login"} 
                         </Button>
                 </div>
