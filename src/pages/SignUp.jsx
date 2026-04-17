@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 import { Button, FloatingLabel, Form } from 'react-bootstrap';
 import "./SignUp.css";
 import { useDispatch } from 'react-redux';
-import { signUp } from '../store/Slices/authSlice';
+import { loginUser, signUp } from '../store/Slices/authSlice';
 
 const initialFormData = {
     name: "", email: "", password: "", confirmPassword: ""
@@ -14,16 +14,13 @@ function SignUp() {
     const [errors, setErrors] = useState({ name: "", password: "", email: "", confirmPassword: "" });
     const dispatch = useDispatch();
 
-    const checkForm = (name, email, password, password2) => {
+    const checkForm = (name, email, password, password2,isLogin) => {
         const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
         let newErrors = {};
 
         // Name
-        if (name.trim().length === 0) {
-            newErrors.name = "Name is required";
-        }
-
+        
         // Email
         if (email.trim().length === 0) {
             newErrors.email = "Email is required";
@@ -38,12 +35,21 @@ function SignUp() {
             newErrors.password = "Password must be at least 6 characters";
         }
 
+        if(!isLogin){
+            //Name
+        if (name.trim().length === 0) {
+            newErrors.name = "Name is required";
+        }
+
+
         // Confirm Password
         if (password2.trim().length === 0) {
             newErrors.confirmPassword = "Please confirm your password";
         } else if (password !== password2) {
             newErrors.confirmPassword = "Passwords do not match";
         }
+        }
+        
 
         setErrors(newErrors);
 
@@ -54,15 +60,20 @@ function SignUp() {
     const formSubmitHandler = (e) => {
         e.preventDefault();
         const { name, password, email, confirmPassword } = formData;
-        const isValid = checkForm(name, email, password, confirmPassword);
+        const isValid = checkForm(name, email, password, confirmPassword,login);
         if (!login && isValid) {
             const data = {
                 name,
                 password, email
             }
-            dispatch(signUp(data));
+            dispatch(signUp(data));  
+            resetForm();          
+        }else if(login && isValid){
+            console.log("Inside login")
+            dispatch(loginUser({email,password}));
             resetForm();
         }
+        
 
     }
     const resetForm = () => {

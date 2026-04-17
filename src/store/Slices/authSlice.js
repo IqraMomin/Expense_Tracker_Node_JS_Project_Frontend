@@ -17,10 +17,11 @@ export const signUp = createAsyncThunk("auth/signup",async (user)=>{
 
 })
 
-export const login = createAsyncThunk("auth/login",async (user)=>{
+export const loginUser = createAsyncThunk("auth/loginUser",async ({email,password})=>{
     try{
-        const res = await axios.post(API,user);
-        console.log(res);
+        // const res = await axios.post(API,user);
+        // console.log(res);
+        console.log("Login from reducer",email,password);
 
     }catch(err){
         console.log(err);
@@ -41,6 +42,9 @@ const authSlice = createSlice({
         builder
         .addCase(signUp.fulfilled,(state,action)=>{
             state.list.push(action.payload);
+        })
+        .addCase(loginUser.fulfilled,(state,action)=>{
+            console.log(action.payload);
         })
     }
 
