@@ -1,6 +1,8 @@
 import React, { useState } from 'react'
 import { Button, FloatingLabel, Form } from 'react-bootstrap';
 import "./SignUp.css";
+import { useDispatch } from 'react-redux';
+import { signUp } from '../store/Slices/authSlice';
 
 const initialFormData = {
     name: "", email: "", password: "", confirmPassword: ""
@@ -10,6 +12,7 @@ function SignUp() {
     const [login, setLogin] = useState(false);
     const [formData, setFormData] = useState(initialFormData);
     const [errors, setErrors] = useState({ name: "", password: "", email: "", confirmPassword: "" });
+    const dispatch = useDispatch();
 
     const checkForm = (name, email, password, password2) => {
         const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -57,7 +60,7 @@ function SignUp() {
                 name,
                 password, email
             }
-            console.log(data);
+            dispatch(signUp(data));
             resetForm();
         }
 
@@ -77,10 +80,11 @@ function SignUp() {
     return (
         <div className='signup-div'>
             <div className="mb-4">
-                <h2>{login ? "Login" : "SignUp"}</h2>
+                <h2>{login ? "Welcome back" : "Get Started"}</h2>
+                <p style={{marginTop:"1rem"}}>{login ? "Please enter your details" : "Create Account"}</p>
             </div>
             <Form onSubmit={formSubmitHandler}>
-                <FloatingLabel
+                {!login && <FloatingLabel
                     controlId="name"
                     label="Name"
                     className="mb-3">
@@ -92,7 +96,8 @@ function SignUp() {
                         {errors.name}
                     </Form.Control.Feedback>
                     
-                </FloatingLabel>
+                </FloatingLabel>}
+                
                 <FloatingLabel
                     controlId="email"
                     label="Email address"
@@ -123,9 +128,11 @@ function SignUp() {
                     <Form.Control.Feedback type="invalid">
                         {errors.confirmPassword}
                     </Form.Control.Feedback></FloatingLabel>}
-                <div className='text-center d-flex flex-column gap-2'>
+                <div className='d-flex flex-column gap-2'>
                     <Button type="submit" variant="primary">{login ? "LOGIN" : "SIGNUP"}</Button>
-                    <Button style={{ color: "black" }} variant="link">Already a user? Login</Button>
+                    <Button onClick={()=>{setLogin(!login)}} style={{ color: "black" }} variant="link">
+                       {login ? "New User? Sign Up":"Already a user? Login"} 
+                        </Button>
                 </div>
             </Form>
 
