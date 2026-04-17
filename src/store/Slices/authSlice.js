@@ -34,11 +34,15 @@ const authSlice = createSlice({
         user:null,
         isLoggedIn:false,
         error:null,
-        loading:null
+        loading:null,
+        successMessage:null
     },
     reducers:{
         clearError:(state)=>{
             state.error = null;
+        },
+        clearSuccessMessage:(state)=>{
+            state.successMessage = null
         }
     },
     extraReducers:(builder)=>{
@@ -46,11 +50,13 @@ const authSlice = createSlice({
         .addCase(loginUser.pending, (state) => {
             state.loading = true;
             state.error = null;
+            state.successMessage =null
         })
         .addCase(loginUser.fulfilled, (state, action) => {
             state.loading = false;
             state.user = action.payload;
             state.isLoggedIn = true;
+            state.successMessage = "Login Successful"
         })
         .addCase(loginUser.rejected, (state, action) => {
             state.loading = false;
@@ -59,13 +65,16 @@ const authSlice = createSlice({
         .addCase(signUp.pending, (state) => {
             state.loading = true;
             state.error = null;
+            state.successMessage = null
         })
         .addCase(signUp.fulfilled, (state) => {
             state.loading = false;
+            state.successMessage = "Registration Successful"
         })
         .addCase(signUp.rejected, (state, action) => {
             state.loading = false;
             state.error = action.payload;
+
         });
     }
 

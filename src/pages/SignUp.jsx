@@ -14,7 +14,7 @@ function SignUp() {
     const [formData, setFormData] = useState(initialFormData);
     const [errors, setErrors] = useState({ name: "", password: "", email: "", confirmPassword: "" });
     const dispatch = useDispatch();
-    const error = useSelector(state=>state.auth.error);
+    const {error,successMessage} = useSelector(state=>state.auth);
 
 
     const checkForm = (name, email, password, password2,isLogin) => {
@@ -90,6 +90,7 @@ function SignUp() {
             { ...prev, [name]: "" }
         ))
         dispatch(authActions.clearError());
+        dispatch(authActions.clearSuccessMessage());
     }
 
     return (
@@ -98,6 +99,8 @@ function SignUp() {
                 <h2>{login ? "Welcome back" : "Get Started"}</h2>
                 <p style={{marginTop:"1rem"}}>{login ? "Please enter your details" : "Create Account"}</p>
             </div>
+            
+            {successMessage && <Alert variant='success'>{successMessage}</Alert>}
             {error && <Alert variant='danger'>{error}</Alert>}
             <Form onSubmit={formSubmitHandler}>
                 {!login && <FloatingLabel
@@ -149,7 +152,9 @@ function SignUp() {
                     <Button onClick={()=>{
                         setLogin(!login);
                         dispatch(authActions.clearError());
+                        dispatch(authActions.clearSuccessMessage());
                         setErrors({});
+
                         }} style={{ color: "black" }} variant="link">
                        {login ? "New User? Sign Up":"Already a user? Login"} 
                         </Button>
