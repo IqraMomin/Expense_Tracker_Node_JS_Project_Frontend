@@ -3,9 +3,15 @@ import axios from "axios";
 
 const API = "http://localhost:3000/expenses";
 
+
 export const addExpense = createAsyncThunk("expense/addExpense", async (expense, { rejectWithValue }) => {
     try {
-        const res = await axios.post(API, expense);
+        const token = localStorage.getItem("user");
+        const res = await axios.post(API, expense,{
+            headers:{
+                "Authorization":token
+            }
+        });
         console.log(res.data);
         return res.data.expense;
 
@@ -24,6 +30,22 @@ export const fetchAllExpenses = createAsyncThunk("expense/fetchAllExpenses",asyn
     }catch(err){
         console.log(err);
     }
+})
+
+export const deleteExpense = createAsyncThunk("expense/deleteExpense",async(id,{rejectWithValue})=>{
+    try{
+        const token = localStorage.getItem("user");
+        const res = await axios.delete(`${API}/${id}`,{
+            headers:{
+                "Authorization":token
+            }
+        })
+        return id;
+    }
+    catch(Err){
+        return rejectWithValue(Err);
+    }
+    
 })
 
 const expenseSlice = createSlice({
@@ -57,6 +79,19 @@ const expenseSlice = createSlice({
             state.list = action.payload;
         })
         .addCase(fetchAllExpenses.rejected,(state)=>{
+            state.loading = false;
+            state.error = action.payload;
+        })
+        .addCase(deleteExpense.pending,(state)=>{
+            state.loading = true;
+            state.error = null;
+        })
+        .addCase(deleteExpense.fulfilled,(state,action)=>{
+            const id = action.payload;
+            state.loading = false;
+            state.list = state.list.filter(ele=>ele.id!==id);
+        })
+        .addCase(deleteExpense.rejected,(state)=>{
             state.loading = false;
             state.error = action.payload;
         })

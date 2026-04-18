@@ -11,7 +11,10 @@ function App() {
   const dispatch =  useDispatch();
 
   useEffect(()=>{
-    dispatch(fetchAllExpenses());
+    if(isLoggedIn){
+      dispatch(fetchAllExpenses());
+    }
+    
   },[])
   
   return (
