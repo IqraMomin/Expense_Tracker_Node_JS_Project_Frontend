@@ -19,6 +19,7 @@ export const signUp = createAsyncThunk("auth/signup",async (user,{rejectWithValu
 export const loginUser = createAsyncThunk("auth/loginUser",async (user,{rejectWithValue})=>{
     try{
         const res = await axios.post(`${API}/login`,user);
+        localStorage.setItem("user",res.data.user.email);
         return res.data;
 
     }catch(err){
@@ -27,12 +28,13 @@ export const loginUser = createAsyncThunk("auth/loginUser",async (user,{rejectWi
 
 })
 
+const storedUser = localStorage.getItem("user")||null;
 
 const authSlice = createSlice({
     name:"auth",
     initialState:{
-        user:null,
-        isLoggedIn:false,
+        user:storedUser,
+        isLoggedIn:!!storedUser,
         error:null,
         loading:null,
         successMessage:null
@@ -54,7 +56,7 @@ const authSlice = createSlice({
         })
         .addCase(loginUser.fulfilled, (state, action) => {
             state.loading = false;
-            state.user = action.payload;
+            state.user = action.payload.user.email;
             state.isLoggedIn = true;
             state.successMessage = "Login Successful"
         })
