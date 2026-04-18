@@ -17,10 +17,9 @@ export const addExpense = createAsyncThunk("expense/addExpense", async (expense,
 
 export const fetchAllExpenses = createAsyncThunk("expense/fetchAllExpenses",async()=>{
     try{
-        console.log("Inside Fetch");
-        const res = await axios.get(API);
         
-        return res.data.expenses;
+        const res = await axios.get(API);        
+        return res.data;
 
     }catch(err){
         console.log(err);

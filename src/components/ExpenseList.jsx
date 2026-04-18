@@ -7,7 +7,7 @@ function ExpenseList() {
         <div>
             <ul>
                 {expenseList.map(ele=>{
-                    return <li>
+                    return <li key={ele.id}>
                         <p>{ele.amount}</p>
                         <p>{ele.description}</p>
                         <p>{ele.category}</p>
