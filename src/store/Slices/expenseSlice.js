@@ -17,8 +17,8 @@ export const addExpense = createAsyncThunk("expense/addExpense", async (expense,
 
 export const fetchAllExpenses = createAsyncThunk("expense/fetchAllExpenses",async()=>{
     try{
-        
-        const res = await axios.get(API);        
+        const token = localStorage.getItem("user");
+        const res = await axios.get(API,{headers:{"Authorization":token}});        
         return res.data;
 
     }catch(err){
