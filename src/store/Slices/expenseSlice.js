@@ -17,12 +17,13 @@ export const addExpense = createAsyncThunk("expense/addExpense", async (expense,
 
 export const fetchAllExpenses = createAsyncThunk("expense/fetchAllExpenses",async()=>{
     try{
+        console.log("Inside Fetch");
         const res = await axios.get(API);
-        console.log(res.data.expenses);
+        
         return res.data.expenses;
 
     }catch(err){
-        return rejectWithValue(err);
+        console.log(err);
     }
 })
 
