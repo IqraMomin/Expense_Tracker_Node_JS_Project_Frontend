@@ -14,7 +14,12 @@ function Checkout() {
     const doPayment = async () => {
 
         try {
-            const response =await axios.post("http://localhost:3000/pay");
+            const isPremium = localStorage.getItem("isPremium") ==="true";
+            const token = localStorage.getItem("user");
+            const response =await axios.post("http://localhost:3000/pay",{},{
+                headers:{
+                    "Authorization":token
+                }});
                 let checkoutOptions = {
                     paymentSessionId: response.data.paymentSessionId,
                     redirectTarget: "_self",
@@ -29,8 +34,8 @@ function Checkout() {
     };
 
     return (
-        <div class="row">
-            <Button onClick={doPayment}>Buy Premium</Button>
+        <div className="row">
+           {!isPremium && <Button onClick={doPayment}>Buy Premium</Button>} 
         </div>
     );
 }
