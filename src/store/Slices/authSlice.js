@@ -40,7 +40,9 @@ const authSlice = createSlice({
         isLoggedIn:!!storedUser,
         error:null,
         loading:null,
-        successMessage:null
+        successMessage:null,
+        isPremium:localStorage.getItem("isPremium") === "true",
+        leaderBoard:[]
     },
     reducers:{
         clearError:(state)=>{
@@ -49,9 +51,11 @@ const authSlice = createSlice({
         clearSuccessMessage:(state)=>{
             state.successMessage = null
         },
-        logout:(state)=>{
-            state.isLoggedIn = false;
-            state.user = null;
+        logout:(state, action) => {
+          state.user = null,
+          state.isLoggedIn = false;
+         localStorage.removeItem("user"); 
+        localStorage.removeItem("isPremium");
         }
     },
     extraReducers:(builder)=>{
@@ -66,6 +70,7 @@ const authSlice = createSlice({
             state.user = action.payload.token;
             state.isLoggedIn = true;
             state.successMessage = "Login Successful"
+            state.isPremium = action.payload.isPremium;
         })
         .addCase(loginUser.rejected, (state, action) => {
             state.loading = false;
@@ -84,9 +89,29 @@ const authSlice = createSlice({
             state.loading = false;
             state.error = action.payload;
 
-        });
+        })
+        .addCase(getLeaderBoard.pending, (state) => {
+            state.loading = true;
+            state.error = null;
+        })
+        .addCase(getLeaderBoard.fulfilled, (state,action) => {
+            state.loading = false;
+            state.leaderBoard = action.payload; 
+        })
+        .addCase(getLeaderBoard.rejected, (state, action) => {
+            state.loading = false;
+            state.error = action.payload;
+
+        })
     }
 
 });
+
+export const getLeaderBoard = createAsyncThunk("auth/getLeaderBoard",
+async()=>{
+    const res= await axios.get(`${API}/premium/showLeaderBoard`);
+    console.log(res.data);
+    return res.data;
+})
 export const authActions = authSlice.actions;
 export default authSlice.reducer;

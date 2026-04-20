@@ -1,8 +1,13 @@
 import { load } from "@cashfreepayments/cashfree-js";
 import axios from "axios";
 import { Button } from "react-bootstrap";
+import { useSelector } from "react-redux";
+
 
 function Checkout() {
+    const isPremium = useSelector(state=>state.auth.isPremium);
+    
+    
     let cashfree;
     var initializeSDK = async function () {
         cashfree = await load({
@@ -11,10 +16,12 @@ function Checkout() {
     }
     initializeSDK();
 
+    
+
     const doPayment = async () => {
 
         try {
-            const isPremium = localStorage.getItem("isPremium") ==="true";
+            
             const token = localStorage.getItem("user");
             const response =await axios.post("http://localhost:3000/pay",{},{
                 headers:{
