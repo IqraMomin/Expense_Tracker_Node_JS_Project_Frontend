@@ -7,8 +7,8 @@ function LeadershipBoard() {
 
        <ul>
         {leaderBoard?.map(ele=>{
-            return <li key={ele.UserId}>
-                <p>{ele.User.name}</p>
+            return <li key={ele.id}>
+                <p>{ele.name}</p>
                 <p>{ele.totalExpense}</p>
             </li>
         })}

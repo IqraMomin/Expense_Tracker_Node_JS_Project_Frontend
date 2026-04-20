@@ -12,14 +12,17 @@ function PremiumFeatures() {
 
     
     const leaderBoardHandler = ()=>{
-        setShowBoard(true);
-        dispatch(getLeaderBoard());
+        setShowBoard(prev=>!prev);
+        if(!showBoard){
+            dispatch(getLeaderBoard());
+        }
+        
 
     }
 
     return (
         <div>
-           {isPremium && <Button onClick={leaderBoardHandler}>Show Leadership</Button>}
+           {isPremium && <Button onClick={leaderBoardHandler}>{!showBoard ? "Show Leadership" : "Hide LeaderShip Board"}</Button>}
             {showBoard && <LeadershipBoard/>}
         </div>
     )

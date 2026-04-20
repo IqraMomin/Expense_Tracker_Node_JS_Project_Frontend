@@ -110,7 +110,6 @@ const authSlice = createSlice({
 export const getLeaderBoard = createAsyncThunk("auth/getLeaderBoard",
 async()=>{
     const res= await axios.get(`${API}/premium/showLeaderBoard`);
-    console.log(res.data);
     return res.data;
 })
 export const authActions = authSlice.actions;
