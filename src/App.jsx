@@ -6,6 +6,8 @@ import Welcome from './pages/Welcome';
 import { useEffect } from 'react';
 import { fetchAllExpenses } from './store/Slices/expenseSlice';
 import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
+import { Container } from 'react-bootstrap';
+import ForgotPassword from './components/ForgotPassword';
 
 function App() {
   const isLoggedIn = useSelector(state=>state.auth.isLoggedIn);
@@ -20,7 +22,7 @@ function App() {
   
   return (
     <Router>
-      <div className='container-fluid'>
+      <Container fluid className='g-0'>
     <Switch>   
     
       <Route path="/" exact>
@@ -30,9 +32,12 @@ function App() {
       <Route path="/welcome">
       {!isLoggedIn && <SignUp/>}
       {isLoggedIn && <Welcome/>}
-      </Route>         
+      </Route>   
+      <Route path="/forgot-password">
+        <ForgotPassword/>
+        </Route>      
     </Switch>
-    </div>
+    </Container>
     </Router>
   )
 }

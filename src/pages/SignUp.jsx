@@ -4,18 +4,19 @@ import "./SignUp.css";
 import { useDispatch, useSelector } from 'react-redux';
 import { loginUser, signUp } from '../store/Slices/authSlice';
 import { authActions } from '../store/Slices/authSlice';
+import { useHistory } from 'react-router-dom/cjs/react-router-dom.min';
 
 const initialFormData = {
     name: "", email: "", password: "", confirmPassword: ""
 }
 
 function SignUp() {
-    const [login, setLogin] = useState(false);
+    const [login, setLogin] = useState(true);
     const [formData, setFormData] = useState(initialFormData);
     const [errors, setErrors] = useState({ name: "", password: "", email: "", confirmPassword: "" });
     const dispatch = useDispatch();
     const {error,successMessage} = useSelector(state=>state.auth);
-
+    const history = useHistory();
 
     const checkForm = (name, email, password, password2,isLogin) => {
         const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -158,6 +159,11 @@ function SignUp() {
                         }} style={{ color: "black" }} variant="link">
                        {login ? "New User? Sign Up":"Already a user? Login"} 
                         </Button>
+                     {login && <Button variant='link' 
+                     style={{color:"black"}}
+                     onClick={()=>{
+                        history.push("/forgot-password");
+                     }}>Forgot Password?</Button>}   
                 </div>
             </Form>
 

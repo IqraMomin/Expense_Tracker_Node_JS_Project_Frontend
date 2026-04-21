@@ -3,6 +3,7 @@ import { Button, FloatingLabel, Form } from 'react-bootstrap'
 import { useDispatch } from 'react-redux';
 import { addExpense } from '../store/Slices/expenseSlice';
 import axios from 'axios';
+import "./ExpenseForm.css"
 
 
 function ExpenseForm() {
@@ -27,7 +28,7 @@ function ExpenseForm() {
                 setCategory(res.data.category);
             }
 
-        },500);
+        },1000);
 
         return ()=>clearTimeout(timer);
     },[description])
@@ -51,8 +52,8 @@ function ExpenseForm() {
     }
 
     return (
-        <div>
-            <Form onSubmit={formSubmitHandler}>
+            <Form onSubmit={formSubmitHandler} className='expense-form'>
+                <div className='expense-form-div'>                
                 <FloatingLabel
                     controlId="floatingInput"
                     label="Expense Amount"
@@ -91,13 +92,12 @@ function ExpenseForm() {
                         <option value="Bills">Bills</option>                       
                     </Form.Select>
                 </FloatingLabel>
+                </div>
                 <div className='mb-3'>
-                    <Button type="submit" variant='secondary'>Add Expense</Button>
+                    <Button type="submit" className='p-2' variant='secondary'>Add Expense</Button>
                 </div>
 
             </Form>
-
-        </div>
     )
 }
 

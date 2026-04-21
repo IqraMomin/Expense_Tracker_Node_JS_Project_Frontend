@@ -22,7 +22,7 @@ function PremiumFeatures() {
 
     return (
         <div>
-           {isPremium && <Button onClick={leaderBoardHandler}>{!showBoard ? "Show Leadership" : "Hide LeaderShip Board"}</Button>}
+           {isPremium && <Button className='mx-4' onClick={leaderBoardHandler}>{!showBoard ? "Show Leadership" : "Hide LeaderShip Board"}</Button>}
             {showBoard && <LeadershipBoard/>}
         </div>
     )

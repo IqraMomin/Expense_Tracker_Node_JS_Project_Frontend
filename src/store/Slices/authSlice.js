@@ -30,6 +30,21 @@ export const loginUser = createAsyncThunk("auth/loginUser",async (user,{rejectWi
     }
 
 })
+export const getLeaderBoard = createAsyncThunk("auth/getLeaderBoard",
+async()=>{
+    const res= await axios.get(`${API}/premium/showLeaderBoard`);
+    return res.data;
+})
+
+export const resetPassword = createAsyncThunk("auth/resetPassword",async({email},rejectWithValue)=>{
+    try{
+        const res= await axios.post(`${API}/password/forgotpassword`,{email});
+        return res;
+
+    }catch(err){
+        return rejectWithValue(err);
+    }
+})
 
 const storedUser = localStorage.getItem("user")||null;
 
@@ -107,10 +122,6 @@ const authSlice = createSlice({
 
 });
 
-export const getLeaderBoard = createAsyncThunk("auth/getLeaderBoard",
-async()=>{
-    const res= await axios.get(`${API}/premium/showLeaderBoard`);
-    return res.data;
-})
+
 export const authActions = authSlice.actions;
 export default authSlice.reducer;

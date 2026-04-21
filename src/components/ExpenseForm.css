@@ -1,0 +1,15 @@
+.expense-form{
+    max-width:600px ;
+    background-color: aqua;
+    display: flex;
+    flex-direction: column;
+    padding: 2rem;
+}
+.expense-form-div{
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: start;
+    align-items: center;
+    gap: 2rem;
+   
+}
