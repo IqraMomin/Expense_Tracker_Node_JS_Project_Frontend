@@ -2,11 +2,11 @@ import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import axios from "axios";
 import { fetchAllExpenses } from "./expenseSlice";
 
-const API = "http://localhost:3000/users"
+const API = "http://localhost:3000"
 
 export const signUp = createAsyncThunk("auth/signup",async (user,{rejectWithValue})=>{
     try{
-        const res = await axios.post(`${API}/signup`,user);
+        const res = await axios.post(`${API}/users/signup`,user);
         return res.data;
        
     }
@@ -19,7 +19,7 @@ export const signUp = createAsyncThunk("auth/signup",async (user,{rejectWithValu
 
 export const loginUser = createAsyncThunk("auth/loginUser",async (user,{rejectWithValue,dispatch})=>{
     try{
-        const res = await axios.post(`${API}/login`,user);
+        const res = await axios.post(`${API}/users/login`,user);
         localStorage.setItem("user",res.data.token);
         localStorage.setItem("isPremium",res.data.isPremium.toString());
         dispatch(fetchAllExpenses());       
@@ -32,14 +32,15 @@ export const loginUser = createAsyncThunk("auth/loginUser",async (user,{rejectWi
 })
 export const getLeaderBoard = createAsyncThunk("auth/getLeaderBoard",
 async()=>{
-    const res= await axios.get(`${API}/premium/showLeaderBoard`);
+    const res= await axios.get(`${API}/users/premium/showLeaderBoard`);
     return res.data;
 })
 
 export const resetPassword = createAsyncThunk("auth/resetPassword",async({email},rejectWithValue)=>{
     try{
         const res= await axios.post(`${API}/password/forgotpassword`,{email});
-        return res;
+        console.log(res.data.message);
+        return res.data;
 
     }catch(err){
         return rejectWithValue(err);

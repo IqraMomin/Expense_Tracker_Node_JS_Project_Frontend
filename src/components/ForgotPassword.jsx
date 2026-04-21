@@ -10,6 +10,7 @@ function ForgotPassword() {
     const formSubmitHandler = (e)=>{
         e.preventDefault();
         dispatch(resetPassword({email}));
+        setEmail("");
     }
     return (
         <Form onSubmit={formSubmitHandler}>
