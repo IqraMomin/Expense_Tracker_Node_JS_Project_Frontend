@@ -15,7 +15,7 @@ function App() {
 
   useEffect(()=>{
     if(isLoggedIn){
-      dispatch(fetchAllExpenses());
+      dispatch(fetchAllExpenses(1));
     }
     
   },[isLoggedIn]);
