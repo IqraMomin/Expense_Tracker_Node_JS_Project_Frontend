@@ -24,20 +24,23 @@ export const addExpense = createAsyncThunk("expense/addExpense", async (expense,
 
 export const fetchAllExpenses = createAsyncThunk(
     "expense/fetchAllExpenses",
-    async (page, { rejectWithValue }) => {
-        try {
-            const token = localStorage.getItem("user");
-
-            const res = await axios.get(`${API}?page=${page}`, {
-                headers: { Authorization: token },
-            });
-
-            return res.data;
-        } catch (err) {
-            return rejectWithValue(err.response?.data || err.message);
-        }
+    async ({ page, limit }, { rejectWithValue }) => {
+      try {
+        const token = localStorage.getItem("user");
+  
+        const res = await axios.get(
+          `${API}?page=${page}&limit=${limit}`,
+          {
+            headers: { Authorization: token },
+          }
+        );
+  
+        return res.data;
+      } catch (err) {
+        return rejectWithValue(err.response?.data);
+      }
     }
-);
+  );
 
 export const deleteExpense = createAsyncThunk("expense/deleteExpense", async (id, { rejectWithValue }) => {
     try {
