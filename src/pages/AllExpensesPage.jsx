@@ -1,9 +1,9 @@
 import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { fetchExpense } from "../store/Slices/expenseSlice";
+import { fetchAllExpenses } from "../store/Slices/expenseSlice";
 import ShowExpenses from "../components/ShowExpenses";
 
-const DailyExpense = () => {
+const AllExpensesPage = () => {
   const dispatch = useDispatch();
 
 
@@ -21,13 +21,13 @@ const DailyExpense = () => {
 
   useEffect(() => {
     const limit = Number(localStorage.getItem("itemsPerPage")) || 2;
-    dispatch(fetchExpense({ page: 1, limit ,type:"daily"}));
+    dispatch(fetchAllExpenses({ page: 1, limit }));
   }, [dispatch]);
 
   useEffect(()=>{
     if(!loading && list.length===0 && currentPage>1){
       const limit = Number(localStorage.getItem("itemsPerPage")) || 2;
-      dispatch(fetchExpense({ page: currentPage-1, limit ,type:"daily"}));
+      dispatch(fetchAllExpenses({ page: currentPage-1, limit }));
     
     }
   },[list,currentPage,loading,dispatch]);
@@ -36,7 +36,7 @@ const DailyExpense = () => {
 // this is your function 👇
 const handlePageChange = (page) => {
   const limit = Number(localStorage.getItem("itemsPerPage")) || 2;
-  dispatch(fetchExpense({ page, limit ,type:"daily"}));
+  dispatch(fetchAllExpenses({ page, limit }));
 };
 
   return (
@@ -50,10 +50,9 @@ const handlePageChange = (page) => {
     loading={loading}
     error={error}
     handlePageChange={handlePageChange}
-    expenseType="Daily Expenses"
+    expenseType="All Expenses"
     />
   );
 };
 
-
-export default DailyExpense
+export default AllExpensesPage;

@@ -6,8 +6,8 @@ import Welcome from './pages/Welcome';
 import { useEffect } from 'react';
 import { fetchAllExpenses } from './store/Slices/expenseSlice';
 import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
-import { Container } from 'react-bootstrap';
 import ForgotPassword from './components/ForgotPassword';
+import { Container } from 'react-bootstrap';
 
 function App() {
   const isLoggedIn = useSelector(state=>state.auth.isLoggedIn);
@@ -15,14 +15,16 @@ function App() {
 
   useEffect(()=>{
     if(isLoggedIn){
-      dispatch(fetchAllExpenses(1));
+      const saved = Number(localStorage.getItem("itemsPerPage"));
+      const currentPage = Number(localStorage.getItem("currentPage"));
+      dispatch(fetchAllExpenses({page:currentPage,limit:saved}));
     }
     
   },[isLoggedIn]);
   
   return (
+    <Container fluid>
     <Router>
-      <Container fluid className='g-0'>
     <Switch>   
     
       <Route path="/" exact>
@@ -37,8 +39,8 @@ function App() {
         <ForgotPassword/>
         </Route>      
     </Switch>
-    </Container>
     </Router>
+    </Container>
   )
 }
 

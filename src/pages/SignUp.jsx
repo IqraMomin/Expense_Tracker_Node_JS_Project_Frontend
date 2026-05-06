@@ -95,7 +95,10 @@ function SignUp() {
     }
 
     return (
-        <div className='signup-div'>
+        <div className='d-flex justify-content-center align-items-center vh-100'>
+            <div className='signup-div'>
+
+            
             <div className="mb-4">
                 <h2>{login ? "Welcome back" : "Get Started"}</h2>
                 <p style={{marginTop:"1rem"}}>{login ? "Please enter your details" : "Create Account"}</p>
@@ -166,7 +169,7 @@ function SignUp() {
                      }}>Forgot Password?</Button>}   
                 </div>
             </Form>
-
+            </div>
 
         </div>
     )

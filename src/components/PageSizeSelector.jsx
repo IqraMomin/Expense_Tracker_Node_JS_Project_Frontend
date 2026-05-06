@@ -5,7 +5,7 @@ import { fetchAllExpenses } from "../store/Slices/expenseSlice";
 const PageSizeSelector = () => {
   const dispatch = useDispatch();
 
-  const [limit, setLimit] = useState(5);
+  const [limit, setLimit] = useState(2);
 
   // load saved preference
   useEffect(() => {

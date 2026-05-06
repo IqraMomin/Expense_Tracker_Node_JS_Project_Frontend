@@ -1,0 +1,43 @@
+/* Full table box */
+.table-content {
+    background: #fff;
+    border-radius: 16px;
+    overflow: hidden;
+    font-size: 15px;
+  }
+  
+  /* Header styling */
+  .table-content thead {
+    background: #f8f9fc;
+    font-weight: 600;
+    color: #333;
+  }
+  
+  .table-content thead th {
+    padding: 16px;
+    border-bottom: 1px solid #e5e7eb !important;
+  }
+  
+  /* Rows */
+  .table-content tbody tr td {
+    padding: 16px;
+    border-bottom: 1px solid #eef0f4;
+    color: #444;
+  }
+  
+  /* Last row without border */
+  .table-content tbody tr:last-child td {
+    border-bottom: none;
+  }
+  
+  /* Hover effect like the screenshot */
+  .table-content tbody tr:hover {
+    background: #f4f6ff;
+    transition: 0.2s ease-in-out;
+  }
+  
+  /* Smooth rounded corners */
+  .table-content {
+    border-radius: 16px !important;
+  }
+  

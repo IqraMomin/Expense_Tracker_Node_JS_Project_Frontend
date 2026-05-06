@@ -72,6 +72,9 @@ const authSlice = createSlice({
           state.isLoggedIn = false;
          localStorage.removeItem("user"); 
         localStorage.removeItem("isPremium");
+        },
+        setPremium:(state,action)=>{
+            state.isPremium = action.payload;
         }
     },
     extraReducers:(builder)=>{

@@ -1,9 +1,10 @@
-.expense-form{
+/* .expense-form{
     max-width:600px ;
     background-color: aqua;
     display: flex;
     flex-direction: column;
     padding: 2rem;
+    margin: auto;
 }
 .expense-form-div{
     display: flex;
@@ -12,4 +13,4 @@
     align-items: center;
     gap: 2rem;
    
-}
+} */

@@ -2,14 +2,17 @@ import React from 'react'
 import { Nav, Navbar, NavDropdown, Button, Container } from 'react-bootstrap';
 import { authActions } from '../../store/Slices/authSlice';
 import { useDispatch } from 'react-redux'
-import PremiumFeatures from '../PremiumFeatures';
+import { NavLink } from 'react-router-dom/cjs/react-router-dom';
+import "./NavigationBar.css"
+import { FaCalendarDay, FaCalendarAlt, FaChartLine, FaSignOutAlt } from "react-icons/fa";
+
 
 function NavigationBar() {
     const dispatch = useDispatch();
     return (
-        <Navbar expand="lg" className="bg-body-tertiary py-3">
+        <Navbar expand="lg" fixed='top' style={{ backgroundColor: "greenyellow" }} className="bg-body-tertiary py-3">
             <Container fluid>
-                <Navbar.Brand href="#">Day to Day Expenses</Navbar.Brand>
+                <Navbar.Brand>Day to Day Expenses</Navbar.Brand>
                 <Navbar.Toggle aria-controls="navbarScroll" />
                 <Navbar.Collapse id="navbarScroll">
                     <Nav
@@ -17,15 +20,19 @@ function NavigationBar() {
                         style={{ maxHeight: '100px' }}
                         navbarScroll
                     >
-                        <Nav.Link href="#action1">Daily Expense</Nav.Link>
-                        <Nav.Link href="#action2">Monthly Expense</Nav.Link>
-                        <Nav.Link href="#action2">Yearly Expense</Nav.Link>
-                                               
+                        <Nav.Link as={NavLink} to="/welcome/allExpenses" activeClassName="active-link">All Expense</Nav.Link>
+                        <Nav.Link as={NavLink} to="/welcome/dailyExpenses" activeClassName="active-link"><FaCalendarDay style={{ marginRight: "6px" }} />Daily Expense</Nav.Link>
+                        <Nav.Link as={NavLink} to="/welcome/monthlyExpenses" activeClassName="active-link">Monthly Expense</Nav.Link>
+
                     </Nav>
-                    <PremiumFeatures/>
-                    <Button onClick={() => {
-                        dispatch(authActions.logout());
-                    }}>Logout</Button>
+
+                        
+                        <Button
+                            variant='danger'
+                            onClick={() => {
+                                dispatch(authActions.logout());
+                            }}><FaSignOutAlt style={{marginRight:"5px"}}/>Logout</Button>
+
                 </Navbar.Collapse>
             </Container>
         </Navbar>

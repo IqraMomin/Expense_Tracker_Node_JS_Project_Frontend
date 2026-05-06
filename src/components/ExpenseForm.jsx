@@ -2,6 +2,7 @@ import React,{useEffect, useState} from 'react'
 import { Button, FloatingLabel, Form } from 'react-bootstrap'
 import { useDispatch } from 'react-redux';
 import { addExpense } from '../store/Slices/expenseSlice';
+import { Row, Col, Card } from "react-bootstrap";
 import axios from 'axios';
 import "./ExpenseForm.css"
 
@@ -12,6 +13,7 @@ function ExpenseForm() {
     const [category,setCategory] = useState("");
     const [manualChange,setManualChange] = useState(false);
     const [showCategory,setShowCategory] = useState("");
+    const [notes,setNotes] = useState("");
     
     const dispatch = useDispatch();
 
@@ -42,62 +44,93 @@ function ExpenseForm() {
         setAmount("");
         setCategory("");
         setDescription("");
+        setNotes("");
     }
 
     const formSubmitHandler = (e)=>{
         e.preventDefault();
-        const expense = {amount,description,category};
+        const expense = {amount,description,category,notes};
         dispatch(addExpense(expense));
         resetExpenses();
     }
 
-    return (
-            <Form onSubmit={formSubmitHandler} className='expense-form'>
-                <div className='expense-form-div'>                
-                <FloatingLabel
-                    controlId="floatingInput"
-                    label="Expense Amount"
-                    className="mb-3"
-                >
-                    <Form.Control type="number" placeholder="Expense Amount : "
-                    name='amount'
+    return (       
+        <Form onSubmit={formSubmitHandler}>
+          <Card className="p-3 shadow-sm mt-5">
+            <Row className="g-3">
+        
+              {/* Amount */}
+              <Col xs={12} md={6} lg={2}>
+                <FloatingLabel label="Expense Amount">
+                  <Form.Control
+                    type="number"
+                    placeholder="Expense Amount"
+                    name="amount"
                     value={amount}
-                    onChange={(e)=>{
-                        setAmount(e.target.value)
-                    }} />
+                    onChange={(e) => setAmount(e.target.value)}
+                  />
                 </FloatingLabel>
-                <FloatingLabel
-                    controlId="floatingInput"
-                    label="Description "
-                    className="mb-3"
-                >
-                    <Form.Control type="text" placeholder="Description"
-                    name='description'
+              </Col>
+        
+              {/* Description */}
+              <Col xs={12} md={6} lg={3}>
+                <FloatingLabel label="Description">
+                  <Form.Control
+                    type="text"
+                    placeholder="Description"
+                    name="description"
                     value={description}
-                    onChange={handleChange} />
+                    onChange={handleChange}
+                  />
                 </FloatingLabel>
-                <p variant="success">{showCategory}</p>
-                <FloatingLabel controlId="floatingSelect" label="Expense Category">
-                    <Form.Select aria-label="Floating label select example"
-                    name='category' value={category}
-                    onChange={(e)=>{
-                        setManualChange(true);
-                        setCategory(e.target.value)
+              </Col>
+        
+              {/* Category */}
+              <Col xs={12} md={6} lg={3}>
+                <FloatingLabel label="Expense Category">
+                  <Form.Select
+                    name="category"
+                    value={category}
+                    onChange={(e) => {
+                      setManualChange(true);
+                      setCategory(e.target.value);
                     }}
-                    className='mb-3'>
-                        <option value="Food">Food</option>
-                        <option value="Travel">Travel</option>
-                        <option value="Entertainment">Entertainment</option>
-                        <option value="Shopping">Shopping</option>
-                        <option value="Bills">Bills</option>                       
-                    </Form.Select>
+                  >
+                    <option value="Food">Food</option>
+                    <option value="Travel">Travel</option>
+                    <option value="Entertainment">Entertainment</option>
+                    <option value="Shopping">Shopping</option>
+                    <option value="Bills">Bills</option>
+                  </Form.Select>
                 </FloatingLabel>
-                </div>
-                <div className='mb-3'>
-                    <Button type="submit" className='p-2' variant='secondary'>Add Expense</Button>
-                </div>
-
-            </Form>
+              </Col>
+        
+              {/* Notes */}
+              <Col xs={12} md={6} lg={2}>
+                <FloatingLabel label="Notes">
+                  <Form.Control
+                    type="text"
+                    placeholder="Notes"
+                    name="notes"
+                    value={notes}
+                    onChange={(e) => setNotes(e.target.value)}
+                  />
+                </FloatingLabel>
+              </Col>
+        
+              {/* Button */}
+              <Col xs={12} md={6} lg={2} className="d-flex align-items-end">
+                <Button type="submit" variant="secondary" className="w-100">
+                  Add Expense
+                </Button>
+              </Col>
+        
+            </Row>
+        
+            {/* Category preview */}
+            <p className="mt-2">{showCategory}</p>
+          </Card>
+        </Form>
     )
 }
 

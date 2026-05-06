@@ -1,61 +1,125 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import axios from "axios";
 
-const API = "http://localhost:3000/expenses";
 
 
-export const addExpense = createAsyncThunk("expense/addExpense", async (expense, { rejectWithValue }) => {
-    try {
-        const token = localStorage.getItem("user");
-        const res = await axios.post(API, expense, {
-            headers: {
-                "Authorization": token
-            }
-        });
-        console.log(res.data);
-        return res.data.expense;
-
-    } catch (err) {
-        return rejectWithValue(err);
-    }
-
-})
+const API = "http://localhost:3000";
 
 
-export const fetchAllExpenses = createAsyncThunk(
-    "expense/fetchAllExpenses",
-    async ({ page, limit }, { rejectWithValue }) => {
+export const addExpense = createAsyncThunk(
+    "expense/addExpense",
+    async (expense, { rejectWithValue, dispatch, getState }) => {
       try {
         const token = localStorage.getItem("user");
   
-        const res = await axios.get(
-          `${API}?page=${page}&limit=${limit}`,
-          {
-            headers: { Authorization: token },
-          }
-        );
+        await axios.post(`${API}/expenses`, expense, {
+          headers: { Authorization: token }
+        });
   
-        return res.data;
+        const state = getState();
+        const currentPage = state.expense.currentPage;
+        const type = state.expense.type; 
+        const limit = Number(localStorage.getItem("itemsPerPage"));
+  
+        if (type === "all") {
+          dispatch(fetchAllExpenses({ page: currentPage, limit }));
+        } else {
+          dispatch(fetchExpense({ type, page: currentPage, limit }));
+        }
+  
       } catch (err) {
-        return rejectWithValue(err.response?.data);
+        return rejectWithValue(err);
       }
     }
   );
 
-export const deleteExpense = createAsyncThunk("expense/deleteExpense", async (id, { rejectWithValue }) => {
+
+export const fetchAllExpenses = createAsyncThunk(
+    "expense/fetchAllExpenses",
+    async ({ page, limit }, {dispatch }) => {
+        try {
+            dispatch(clearExpenses());
+            dispatch(setLoading(true));
+            const token = localStorage.getItem("user");
+
+            const res = await axios.get(
+                `${API}/expenses?page=${page}&limit=${limit}`,
+                {
+                    headers: { Authorization: token },
+                }
+            );
+            localStorage.setItem("currentPage", res.data.currentPage);
+            dispatch(setExpense({
+                expenses: res.data.expenses,
+                currentPage: res.data.currentPage,
+                isNextPage: res.data.isNextPage,
+                isPreviousPage: res.data.isPreviousPage,
+                nextPage: res.data.nextPage,
+                previousPage: res.data.previousPage,
+                lastPage: res.data.lastPage,
+                type:"all"
+            }))
+            dispatch(setLoading(false));
+
+        } catch (err) {
+            dispatch(setError(err.message));
+            dispatch(setLoading(false));
+        }
+    }
+);
+
+export const deleteExpense = createAsyncThunk("expense/deleteExpense", async (id, { rejectWithValue,
+    dispatch, getState }) => {
     try {
+        const state = getState();
+        const currentPage = state.expense.currentPage;
         const token = localStorage.getItem("user");
-        const res = await axios.delete(`${API}/${id}`, {
+        const res = await axios.delete(`${API}/expenses/${id}`, {
             headers: {
                 "Authorization": token
             }
         })
+        const limit = Number(localStorage.getItem("itemsPerPage"));
+        dispatch(fetchAllExpenses({ page: currentPage, limit }))
+
         return id;
     }
     catch (Err) {
         return rejectWithValue(Err);
     }
 
+})
+
+export const fetchExpense= createAsyncThunk("expense/fetchExpense",async({type,page,limit},{dispatch})=>{
+    try {
+        dispatch(clearExpenses());
+        dispatch(setLoading(true));
+        const token = localStorage.getItem("user");
+       
+        const res = await axios.get(
+            `${API}/premium?page=${page}&limit=${limit}&type=${type}`,
+            {
+                headers: { Authorization: token },
+            }
+        );
+        console.log("Daily Expense",res.data.expenses);
+        localStorage.setItem("currentPage", res.data.currentPage);
+        dispatch(setExpense({
+            expenses: res.data.expenses,
+            currentPage: res.data.currentPage,
+            isNextPage: res.data.isNextPage,
+            isPreviousPage: res.data.isPreviousPage,
+            nextPage: res.data.nextPage,
+            previousPage: res.data.previousPage,
+            lastPage: res.data.lastPage,
+            type:type
+        }))
+        dispatch(setLoading(false));
+
+    } catch (err) {
+        dispatch(setError(err.message));
+        dispatch(setLoading(false));
+    }
 })
 
 const expenseSlice = createSlice({
@@ -69,9 +133,38 @@ const expenseSlice = createSlice({
         previousPage: null,
         lastPage: 1,
         error: null,
-        loading: false
+        loading: false,
+        itemsPerPage: Number(localStorage.getItem("itemsPerPage")) || 2,
+        type:"all"
     },
-    reducers: {},
+    reducers: {
+        setExpense: (state, action) => {
+            state.list = action.payload.expenses;
+            state.currentPage = action.payload.currentPage;
+            state.isNextPage = action.payload.isNextPage;
+            state.isPreviousPage = action.payload.isPreviousPage;
+            state.nextPage = action.payload.nextPage;
+            state.previousPage = action.payload.previousPage;
+            state.lastPage = action.payload.lastPage;
+            state.type = action.payload.type;
+        },
+        setLoading: (state, action) => {
+            state.loading = action.payload;
+        },
+        setError: (state, action) => {
+            state.error = action.payload;
+        },
+        clearExpenses:(state)=>{
+            state.list = [];
+            state.currentPage = 1;
+            state.isNextPage = false;
+            state.isPreviousPage = false;
+            state.nextPage = null;
+            state.previousPage = null;
+            state.lastPage = 1;
+        }
+
+    },
     extraReducers: (builder) => {
         builder
             .addCase(addExpense.pending, (state) => {
@@ -80,30 +173,12 @@ const expenseSlice = createSlice({
             })
             .addCase(addExpense.fulfilled, (state, action) => {
                 state.loading = false;
-                state.list.push(action.payload);
             })
             .addCase(addExpense.rejected, (state) => {
                 state.loading = false;
                 state.error = action.payload;
             })
-            .addCase(fetchAllExpenses.pending, (state) => {
-                state.loading = true;
-                state.error = null;
-            })
-            .addCase(fetchAllExpenses.fulfilled, (state, action) => {
-                state.loading = false;
-                state.list = action.payload.expenses;
-                state.currentPage = action.payload.currentPage;
-                state.isNextPage = action.payload.isNextPage;
-                state.isPreviousPage = action.payload.isPreviousPage;
-                state.nextPage = action.payload.nextPage;
-                state.previousPage = action.payload.previousPage;
-                state.lastPage = action.payload.lastPage;
-            })
-            .addCase(fetchAllExpenses.rejected, (state) => {
-                state.loading = false;
-                state.error = action.payload;
-            })
+            
             .addCase(deleteExpense.pending, (state) => {
                 state.loading = true;
                 state.error = null;
@@ -122,5 +197,5 @@ const expenseSlice = createSlice({
 });
 
 
-export const expenseActions = expenseSlice.actions;
+export const {setExpense,setError,setLoading,clearExpenses} = expenseSlice.actions;
 export default expenseSlice.reducer;
