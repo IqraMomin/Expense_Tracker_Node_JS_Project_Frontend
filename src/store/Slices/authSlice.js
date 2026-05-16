@@ -1,6 +1,7 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import axios from "axios";
 import { fetchAllExpenses } from "./expenseSlice";
+import Cookies from "js-cookie";
 
 const API = "http://localhost:3000"
 
@@ -20,8 +21,8 @@ export const signUp = createAsyncThunk("auth/signup",async (user,{rejectWithValu
 export const loginUser = createAsyncThunk("auth/loginUser",async (user,{rejectWithValue,dispatch})=>{
     try{
         const res = await axios.post(`${API}/users/login`,user);
-        localStorage.setItem("user",res.data.token);
-        localStorage.setItem("isPremium",res.data.isPremium.toString());
+        Cookies.set("user",res.data.token);
+        Cookies.set("isPremium",res.data.isPremium.toString());
         dispatch(fetchAllExpenses());       
         return res.data;
 

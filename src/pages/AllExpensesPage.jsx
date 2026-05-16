@@ -2,6 +2,7 @@ import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchAllExpenses } from "../store/Slices/expenseSlice";
 import ShowExpenses from "../components/ShowExpenses";
+import { clearExpenses } from "../store/Slices/expenseSlice";
 
 const AllExpensesPage = () => {
   const dispatch = useDispatch();
@@ -18,6 +19,9 @@ const AllExpensesPage = () => {
     error,
   } = useSelector((state) => state.expense);
 
+  useEffect(() => {
+    dispatch(clearExpenses());
+  }, [dispatch]);
 
   useEffect(() => {
     const limit = Number(localStorage.getItem("itemsPerPage")) || 2;

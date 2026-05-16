@@ -38,7 +38,6 @@ export const fetchAllExpenses = createAsyncThunk(
     "expense/fetchAllExpenses",
     async ({ page, limit }, {dispatch }) => {
         try {
-            dispatch(clearExpenses());
             dispatch(setLoading(true));
             const token = localStorage.getItem("user");
 
@@ -90,20 +89,19 @@ export const deleteExpense = createAsyncThunk("expense/deleteExpense", async (id
 
 })
 
-export const fetchExpense= createAsyncThunk("expense/fetchExpense",async({type,page,limit},{dispatch})=>{
+export const fetchExpense= createAsyncThunk("expense/fetchExpense",async({type,page,limit,date},{dispatch})=>{
     try {
-        dispatch(clearExpenses());
         dispatch(setLoading(true));
         const token = localStorage.getItem("user");
        
         const res = await axios.get(
-            `${API}/premium?page=${page}&limit=${limit}&type=${type}`,
+            `${API}/premium?page=${page}&limit=${limit}&type=${type}&date=${date}`,
             {
                 headers: { Authorization: token },
             }
         );
-        console.log("Daily Expense",res.data.expenses);
         localStorage.setItem("currentPage", res.data.currentPage);
+        console.log("Expense",res.data.expenses);
         dispatch(setExpense({
             expenses: res.data.expenses,
             currentPage: res.data.currentPage,

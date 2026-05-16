@@ -1,5 +1,6 @@
 import './App.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
+import "react-datepicker/dist/react-datepicker.css";
 import SignUp from './pages/SignUp';
 import { useDispatch, useSelector } from 'react-redux';
 import Welcome from './pages/Welcome';

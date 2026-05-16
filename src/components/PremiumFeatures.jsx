@@ -24,6 +24,7 @@ function PremiumFeatures() {
         <div>
            {isPremium && <Button className='mx-4'
            disabled={!isPremium} 
+           style={{background:"#1e293b",border:"0px"}}
            onClick={leaderBoardHandler}>{!showBoard ? "Show Leadership" : "Hide LeaderShip Board"}</Button>}
             {showBoard && <LeadershipBoard/>}
         </div>

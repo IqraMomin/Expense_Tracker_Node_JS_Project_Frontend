@@ -15,7 +15,7 @@ import { authActions } from "../store/Slices/authSlice";
 function Welcome() {
   const dispatch = useDispatch();
   const location = useLocation();
-
+  
   useEffect(()=>{
     const params = new URLSearchParams(location.search);
     const isPremium = params.get("premium");
@@ -41,6 +41,7 @@ function Welcome() {
                   </Route>
 
                   <Route path="/welcome/allExpenses" component={AllExpensesPage} />
+                  {}
                   <Route path="/welcome/dailyExpenses" component={DailyExpense} />
                   <Route path="/welcome/monthlyExpenses" component={MonthlyExpense} />
                 </Switch>
