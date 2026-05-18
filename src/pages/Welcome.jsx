@@ -2,7 +2,7 @@ import React, { useEffect } from "react";
 import { Route, Switch } from "react-router-dom";
 import { Container, Row, Col } from "react-bootstrap";
 import ExpenseForm from "../components/ExpenseForm";
-import Checkout from "../components/CheckOut";
+import Checkout from "../components/Checkout";
 import NavigationBar from "../components/Header/NavigationBar";
 import AllExpensesPage from "./AllExpensesPage";
 import PremiumFeatures from "../components/PremiumFeatures";
