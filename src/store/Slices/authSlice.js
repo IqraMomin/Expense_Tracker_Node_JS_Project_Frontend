@@ -3,7 +3,7 @@ import axios from "axios";
 import { fetchAllExpenses } from "./expenseSlice";
 import Cookies from "js-cookie";
 
-const API = "http://localhost:3000"
+const API = "http://3.6.41.27:3000"
 
 export const signUp = createAsyncThunk("auth/signup",async (user,{rejectWithValue})=>{
     try{
