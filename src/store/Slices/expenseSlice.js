@@ -1,5 +1,6 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import axios from "axios";
+import Cookies from "js-cookie";
 
 
 
@@ -10,7 +11,7 @@ export const addExpense = createAsyncThunk(
     "expense/addExpense",
     async (expense, { rejectWithValue, dispatch, getState }) => {
       try {
-        const token = localStorage.getItem("user");
+        const token = Cookies.get("user");
   
         await axios.post(`${API}/expenses`, expense, {
           headers: { Authorization: token }
@@ -19,7 +20,7 @@ export const addExpense = createAsyncThunk(
         const state = getState();
         const currentPage = state.expense.currentPage;
         const type = state.expense.type; 
-        const limit = Number(localStorage.getItem("itemsPerPage"));
+        const limit = Number(Cookies.get("itemsPerPage"));
   
         if (type === "all") {
           dispatch(fetchAllExpenses({ page: currentPage, limit }));
@@ -39,7 +40,7 @@ export const fetchAllExpenses = createAsyncThunk(
     async ({ page, limit }, {dispatch }) => {
         try {
             dispatch(setLoading(true));
-            const token = localStorage.getItem("user");
+            const token = Cookies.get("user");
 
             const res = await axios.get(
                 `${API}/expenses?page=${page}&limit=${limit}`,
@@ -47,7 +48,7 @@ export const fetchAllExpenses = createAsyncThunk(
                     headers: { Authorization: token },
                 }
             );
-            localStorage.setItem("currentPage", res.data.currentPage);
+            Cookies.set("currentPage", res.data.currentPage);
             dispatch(setExpense({
                 expenses: res.data.expenses,
                 currentPage: res.data.currentPage,
@@ -72,13 +73,13 @@ export const deleteExpense = createAsyncThunk("expense/deleteExpense", async (id
     try {
         const state = getState();
         const currentPage = state.expense.currentPage;
-        const token = localStorage.getItem("user");
-        const res = await axios.delete(`${API}/expenses/${id}`, {
+        const token = Cookies.get("user");
+        await axios.delete(`${API}/expenses/${id}`, {
             headers: {
                 "Authorization": token
             }
         })
-        const limit = Number(localStorage.getItem("itemsPerPage"));
+        const limit = Number(Cookies.get("itemsPerPage"));
         dispatch(fetchAllExpenses({ page: currentPage, limit }))
 
         return id;
@@ -92,7 +93,7 @@ export const deleteExpense = createAsyncThunk("expense/deleteExpense", async (id
 export const fetchExpense= createAsyncThunk("expense/fetchExpense",async({type,page,limit,date},{dispatch})=>{
     try {
         dispatch(setLoading(true));
-        const token = localStorage.getItem("user");
+        const token = Cookies.get("user");
        
         const res = await axios.get(
             `${API}/premium?page=${page}&limit=${limit}&type=${type}&date=${date}`,
@@ -100,7 +101,7 @@ export const fetchExpense= createAsyncThunk("expense/fetchExpense",async({type,p
                 headers: { Authorization: token },
             }
         );
-        localStorage.setItem("currentPage", res.data.currentPage);
+        Cookies.get("currentPage", res.data.currentPage);
         console.log("Expense",res.data.expenses);
         dispatch(setExpense({
             expenses: res.data.expenses,
@@ -132,7 +133,7 @@ const expenseSlice = createSlice({
         lastPage: 1,
         error: null,
         loading: false,
-        itemsPerPage: Number(localStorage.getItem("itemsPerPage")) || 2,
+        itemsPerPage: Number(Cookies.get("itemsPerPage")) || 2,
         type:"all"
     },
     reducers: {

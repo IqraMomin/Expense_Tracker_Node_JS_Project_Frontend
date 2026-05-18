@@ -3,6 +3,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { clearExpenses, fetchExpense } from "../store/Slices/expenseSlice";
 import ShowExpenses from "../components/ShowExpenses";
 import { FaChevronLeft, FaChevronRight } from "react-icons/fa";
+import Cookies from "js-cookie";
 
 function MonthlyExpense() {
   const dispatch = useDispatch();
@@ -34,7 +35,7 @@ const nextMonthDisabled =
   // fetch monthly expenses
   useEffect(() => {
     if (isPremium) {
-      const limit = Number(localStorage.getItem("itemsPerPage")) || 2;
+      const limit = Number(Cookies.get("itemsPerPage")) || 2;
 
       dispatch(
         fetchExpense({
@@ -55,7 +56,7 @@ const nextMonthDisabled =
       list.length === 0 &&
       currentPage > 1
     ) {
-      const limit = Number(localStorage.getItem("itemsPerPage")) || 2;
+      const limit = Number(Cookies.get("itemsPerPage")) || 2;
 
       dispatch(
         fetchExpense({
@@ -77,7 +78,7 @@ const nextMonthDisabled =
 
   // pagination
   const handlePageChange = (page) => {
-    const limit = Number(localStorage.getItem("itemsPerPage")) || 2;
+    const limit = Number(Cookies.get("itemsPerPage")) || 2;
 
     dispatch(
       fetchExpense({

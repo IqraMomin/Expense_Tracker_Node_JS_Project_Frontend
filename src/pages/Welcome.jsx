@@ -12,6 +12,7 @@ import MonthlyExpense from "./MonthlyExpense";
 import { useDispatch } from "react-redux";
 import { useLocation } from "react-router-dom/cjs/react-router-dom";
 import { authActions } from "../store/Slices/authSlice";
+import Cookies from "js-cookie";
 function Welcome() {
   const dispatch = useDispatch();
   const location = useLocation();
@@ -20,7 +21,7 @@ function Welcome() {
     const params = new URLSearchParams(location.search);
     const isPremium = params.get("premium");
     if(isPremium==="true"){
-      localStorage.setItem("isPremium","true");
+      Cookies.set("isPremium","true");
       dispatch(authActions.setPremium(true));
     }
   },[location,dispatch])

@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { clearExpenses, fetchExpense } from "../store/Slices/expenseSlice";
 import ShowExpenses from "../components/ShowExpenses";
+import Cookies from "js-cookie";
 import {
   FaChevronLeft,
   FaChevronRight,
@@ -40,7 +41,7 @@ const DailyExpense = () => {
 
       const limit =
         Number(
-          localStorage.getItem("itemsPerPage")
+          Cookies.get("itemsPerPage")
         ) || 2;
 
       dispatch(
@@ -72,7 +73,7 @@ const DailyExpense = () => {
 
       const limit =
         Number(
-          localStorage.getItem("itemsPerPage")
+          Cookies.get("itemsPerPage")
         ) || 2;
 
       dispatch(
@@ -100,7 +101,7 @@ const DailyExpense = () => {
 
     const limit =
       Number(
-        localStorage.getItem("itemsPerPage")
+        Cookies.get("itemsPerPage")
       ) || 2;
 
     dispatch(

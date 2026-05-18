@@ -3,6 +3,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { fetchAllExpenses } from "../store/Slices/expenseSlice";
 import ShowExpenses from "../components/ShowExpenses";
 import { clearExpenses } from "../store/Slices/expenseSlice";
+import Cookies from "js-cookie";
 
 const AllExpensesPage = () => {
   const dispatch = useDispatch();
@@ -24,13 +25,13 @@ const AllExpensesPage = () => {
   }, [dispatch]);
 
   useEffect(() => {
-    const limit = Number(localStorage.getItem("itemsPerPage")) || 2;
+    const limit = Number(Cookies.get("itemsPerPage")) || 2;
     dispatch(fetchAllExpenses({ page: 1, limit }));
   }, [dispatch]);
 
   useEffect(()=>{
     if(!loading && list.length===0 && currentPage>1){
-      const limit = Number(localStorage.getItem("itemsPerPage")) || 2;
+      const limit = Number(Cookies.get("itemsPerPage")) || 2;
       dispatch(fetchAllExpenses({ page: currentPage-1, limit }));
     
     }
@@ -39,7 +40,7 @@ const AllExpensesPage = () => {
 
 // this is your function 👇
 const handlePageChange = (page) => {
-  const limit = Number(localStorage.getItem("itemsPerPage")) || 2;
+  const limit = Number(Cookies.get("itemsPerPage")) || 2;
   dispatch(fetchAllExpenses({ page, limit }));
 };
 

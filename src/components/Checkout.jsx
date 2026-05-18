@@ -1,5 +1,6 @@
 import { load } from "@cashfreepayments/cashfree-js";
 import axios from "axios";
+import Cookies from "js-cookie";
 import { Button } from "react-bootstrap";
 import { useSelector } from "react-redux";
 
@@ -22,7 +23,7 @@ function Checkout() {
 
         try {
             
-            const token = localStorage.getItem("user");
+            const token = Cookies.get("user");
             const response =await axios.post("http://localhost:3000/pay",{},{
                 headers:{
                     "Authorization":token

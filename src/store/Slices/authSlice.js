@@ -48,7 +48,7 @@ export const resetPassword = createAsyncThunk("auth/resetPassword",async({email}
     }
 })
 
-const storedUser = localStorage.getItem("user")||null;
+const storedUser = Cookies.get("user")||null;
 
 const authSlice = createSlice({
     name:"auth",
@@ -58,7 +58,7 @@ const authSlice = createSlice({
         error:null,
         loading:null,
         successMessage:null,
-        isPremium:localStorage.getItem("isPremium") === "true",
+        isPremium:Cookies.get("isPremium") === "true",
         leaderBoard:[]
     },
     reducers:{
@@ -71,8 +71,8 @@ const authSlice = createSlice({
         logout:(state, action) => {
           state.user = null,
           state.isLoggedIn = false;
-         localStorage.removeItem("user"); 
-        localStorage.removeItem("isPremium");
+         Cookies.remove("user"); 
+        Cookies.remove("isPremium");
         },
         setPremium:(state,action)=>{
             state.isPremium = action.payload;

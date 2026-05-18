@@ -4,6 +4,7 @@ import PageSizeSelector from "../components/PageSizeSelector";
 import TableContent from "../components/UI/TableContent";
 import { Button, Col, Row } from "react-bootstrap";
 import { CSVLink } from "react-csv";
+import { useSelector } from "react-redux";
 
 function ShowExpenses({
   list,
@@ -17,6 +18,7 @@ function ShowExpenses({
   expenseType,
   handlePageChange
 }) {
+  const isPremium = useSelector(state => state.auth.isPremium);
 
   const headers = [
     { label: "ID", key: "id" },
@@ -60,11 +62,11 @@ function ShowExpenses({
           />
         </Col>
 
-        <Col md={5} className="text-end">
+        {isPremium && <Col md={5} className="text-end">
           <CSVLink data={list} headers={headers}>
             <Button variant="success">Download CSV</Button>
           </CSVLink>
-        </Col>
+        </Col>}
       </Row>
     </Row>
   )

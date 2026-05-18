@@ -1,6 +1,5 @@
 import './App.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
-import "react-datepicker/dist/react-datepicker.css";
 import SignUp from './pages/SignUp';
 import { useDispatch, useSelector } from 'react-redux';
 import Welcome from './pages/Welcome';
@@ -9,6 +8,7 @@ import { fetchAllExpenses } from './store/Slices/expenseSlice';
 import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 import ForgotPassword from './components/ForgotPassword';
 import { Container } from 'react-bootstrap';
+import Cookies from 'js-cookie';
 
 function App() {
   const isLoggedIn = useSelector(state=>state.auth.isLoggedIn);
@@ -16,8 +16,8 @@ function App() {
 
   useEffect(()=>{
     if(isLoggedIn){
-      const saved = Number(localStorage.getItem("itemsPerPage"));
-      const currentPage = Number(localStorage.getItem("currentPage"));
+      const saved = Number(Cookies.get("itemsPerPage"));
+      const currentPage = Number(Cookies.get("currentPage"));
       dispatch(fetchAllExpenses({page:currentPage,limit:saved}));
     }
     
