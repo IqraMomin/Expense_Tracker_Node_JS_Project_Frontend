@@ -24,7 +24,7 @@ function Checkout() {
         try {
             
             const token = Cookies.get("user");
-            const response =await axios.post("http://localhost:3000/pay",{},{
+            const response =await axios.post("http://3.6.41.27:3000/pay",{},{
                 headers:{
                     "Authorization":token
                 }});
