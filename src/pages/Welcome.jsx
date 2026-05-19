@@ -42,7 +42,6 @@ function Welcome() {
                   </Route>
 
                   <Route path="/welcome/allExpenses" component={AllExpensesPage} />
-                  {}
                   <Route path="/welcome/dailyExpenses" component={DailyExpense} />
                   <Route path="/welcome/monthlyExpenses" component={MonthlyExpense} />
                 </Switch>
